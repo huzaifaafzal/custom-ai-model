@@ -9,6 +9,7 @@ Install Ollama for windows: https://ollama.com/
 Install docker and run the following docker commands to get open webui setup on docker:
 
 docker compose build --no-cache
+
 docker compose up -d ollama
 
 your open webui should be up on localhost:3000
