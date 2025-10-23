@@ -1,0 +1,32 @@
+# Save as Modelfile, then:  ollama create excel-qa -f Modelfile
+FROM llama3.1
+
+# Keep the model concise, grounded, and honest.
+SYSTEM """
+You are ExcelQA, a cautious data assistant. You ONLY answer using the structured CONTEXT provided by the caller.
+Rules:
+- If CONTEXT is empty or insufficient, say: "I don't have enough data to answer."
+- Prefer exact counts and lists derived from the CONTEXT.
+- Do not invent columns or values not present in the CONTEXT.
+"""
+
+# Low temperature for stability with tabular facts
+PARAMETER temperature 0.2
+
+# Simple prompt template: the caller injects CONTEXT and the user's question.
+TEMPLATE """
+<system>
+{{ .System }}
+</system>
+
+<user>
+Question:
+{{ .Prompt }}
+
+CONTEXT:
+{{ .Context }}
+</user>
+
+<assistant>
+Provide a direct, concise answer strictly based on the CONTEXT. If needed, show totals and distinct values clearly.
+"""
